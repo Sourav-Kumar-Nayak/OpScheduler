@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpScheduler - Patient Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="patient-dashboard.css">
+</head>
+<body>
+<div id="app-container">
+    <nav id="sidebar" class="sidebar">
+        <header>
+            <h1>OpScheduler</h1>
+        </header>
+        <ul class="sidebar-nav">
+            <li><a href="#" class="sidebar-nav-link active" data-section="patient-dashboard"><i class="bi bi-grid-fill"></i><span>Dashboard</span></a></li>
+            <li><a href="#" class="sidebar-nav-link" data-section="profile"><i class="bi bi-person-fill"></i><span>Profile</span></a></li>
+        </ul>
+    </nav>
+
+    <div class="main-content-wrapper">
+        <header class="main-header">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <button id="menu-toggle" class="btn"><i class="bi bi-list"></i></button>
+                <h2 id="section-title">Dashboard</h2>
+            </div>
+            <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+        </header>
+        <main class="main-content">
+            <!-- Patient Dashboard Section -->
+            <section id="patient-dashboard" class="content-section">
+                <h3 style="margin-top: 0;">Your Upcoming Operations</h3>
+                <div id="upcoming-operations-list" class="table-container">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Operation</th>
+                            <th>Doctor</th>
+                            <th>Notes</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- Operations will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Profile Section -->
+            <section id="profile" class="content-section hidden">
+                <h3>Your Profile</h3>
+                <div id="profile-details" class="card" style="background-color: var(--white); padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <!-- Profile details will be loaded here -->
+                </div>
+            </section>
+        </main>
+    </div>
+</div>
+
+<!-- Doctor Details Modal -->
+<div id="doctorDetailsModal" class="modal">
+    <div class="modal-content">
+        <span id="closeDoctorModal" class="close-btn">&times;</span>
+        <h3>Doctor Details</h3>
+        <div id="doctorDetailsContent">
+            <!-- Doctor details will be injected here -->
+        </div>
+    </div>
+</div>
+
+
+<!-- Loader -->
+<div id="loader" class="loader-overlay hidden">
+    <div class="loader"></div>
+    <p>Loading...</p>
+</div>
+
+<script type="module" src="patient-dashboard.js"></script>
+</body>
+</html>

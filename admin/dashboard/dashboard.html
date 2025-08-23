@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpScheduler - Hospital Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+<div id="app-container">
+    <nav id="sidebar" class="sidebar">
+        <header>
+            <h1>OpScheduler</h1>
+        </header>
+        <ul class="sidebar-nav">
+            <li><a href="#" class="sidebar-nav-link active" data-section="dashboard"><i class="bi bi-grid-fill"></i><span>Dashboard</span></a></li>
+            <li><a href="#" class="sidebar-nav-link" data-section="schedule"><i class="bi bi-calendar2-week-fill"></i><span>Schedule</span></a></li>
+            <li><a href="#" class="sidebar-nav-link" data-section="doctors"><i class="bi bi-heart-pulse-fill"></i><span>Doctors</span></a></li>
+            <li><a href="#" class="sidebar-nav-link" data-section="patients"><i class="bi bi-person-fill"></i><span>Patients</span></a></li>
+        </ul>
+    </nav>
+
+    <div style="display: flex; flex-direction: column; flex-grow: 1;">
+        <header class="main-header">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <button id="menu-toggle" class="btn"><i class="bi bi-list"></i></button>
+                <h2 id="section-title">Dashboard</h2>
+            </div>
+            <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+        </header>
+        <main class="main-content">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="content-section">
+                <div class="dashboard-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                    <div class="card" style="background-color: var(--white); padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                        <h3 style="margin: 0 0 0.5rem 0; font-size: 1.125rem; font-weight: 600;">Today's Operations</h3>
+                        <p id="todays-operations" style="margin: 0; font-size: 2.25rem; font-weight: bold;">0</p>
+                    </div>
+                    <div class="card" style="background-color: var(--white); padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                        <h3 style="margin: 0 0 0.5rem 0; font-size: 1.125rem; font-weight: 600;">Upcoming Operations</h3>
+                        <p id="upcoming-operations" style="margin: 0; font-size: 2.25rem; font-weight: bold;">0</p>
+                    </div>
+                    <div class="card" style="background-color: var(--white); padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                        <h3 style="margin: 0 0 0.5rem 0; font-size: 1.125rem; font-weight: 600;">Available Doctors</h3>
+                        <p id="available-doctors" style="margin: 0; font-size: 2.25rem; font-weight: bold;">0</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Schedule Section -->
+            <section id="schedule" class="content-section hidden">
+                <div class="section-controls">
+                    <button id="addScheduleBtn" class="btn btn-primary">Schedule Operation</button>
+                </div>
+                <div id="scheduleForm" class="form-container hidden">
+                    <h3 id="scheduleFormTitle">Schedule New Operation</h3>
+                    <form id="scheduleFormElement">
+                        <input type="hidden" id="scheduleId">
+                        <select id="patientSelect" required></select>
+                        <select id="doctorSelect" required></select>
+                        <input type="text" id="operationType" placeholder="Type of Operation" required>
+                        <label id="operation date">Date of Operation</label>
+                        <input type="date" id="operationDate" required>
+                        <label id="operation time">Time of Operation</label>
+                        <input type="time" id="operationTime" required>
+                        <textarea id="operationNotes" placeholder="Notes (optional)"></textarea>
+                        <div class="form-buttons">
+                            <button type="submit" class="btn btn-primary">Save Schedule</button>
+                            <button type="button" id="cancelScheduleForm" class="btn btn-secondary">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+                <div id="scheduleTable" class="table-container">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Patient</th>
+                            <th>Doctor</th>
+                            <th>Operation</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody id="scheduleTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Doctors Section -->
+            <section id="doctors" class="content-section hidden">
+                <div class="section-controls">
+                    <button id="addDoctorBtn" class="btn btn-primary">Add Doctor</button>
+                </div>
+                <div id="doctorForm" class="form-container hidden">
+                    <h3 id="doctorFormTitle">Add New Doctor</h3>
+                    <form id="doctorFormElement">
+                        <input type="hidden" id="doctorId">
+                        <input type="text" id="doctorName" placeholder="Full Name" required>
+                        <input type="email" id="doctorEmail" placeholder="Email" required>
+                        <input type="tel" id="doctorPhone" placeholder="Phone Number" required>
+                        <input type="text" id="doctorSpecialty" placeholder="Specialty" required>
+                        <div class="form-buttons">
+                            <button type="submit" class="btn btn-primary">Save Doctor</button>
+                            <button type="button" id="cancelDoctorForm" class="btn btn-secondary">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+                <div id="doctorsTable" class="table-container">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Specialty</th>
+                            <th>Phone</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody id="doctorsTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Patients Section -->
+            <section id="patients" class="content-section hidden">
+                <div class="section-controls">
+                    <button id="addPatientBtn" class="btn btn-primary">Add Patient</button>
+                </div>
+                <div id="patientForm" class="form-container hidden">
+                    <h3 id="patientFormTitle">Add New Patient</h3>
+                    <form id="patientFormElement">
+                        <input type="hidden" id="patientId">
+                        <input type="text" id="patientName" placeholder="Full Name" required>
+                        <input type="email" id="patientEmail" placeholder="Email" required>
+                        <input type="tel" id="patientPhone" placeholder="Phone Number" required>
+                        <label id="Date of Birth">Date of Birth</label>
+                        <input type="date" id="patientDob" placeholder="Date of Birth" required>
+                        <input type="text" id="patientAddress" placeholder="Address" required>
+                        <div class="form-buttons">
+                            <button type="submit" class="btn btn-primary">Save Patient</button>
+                            <button type="button" id="cancelPatientForm" class="btn btn-secondary">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+                <div id="patientsTable" class="table-container">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Phone</th>
+                            <th>Address</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody id="patientsTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </main>
+    </div>
+</div>
+
+<!-- Modals -->
+<div id="detailsModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <div id="detailsModalContent"></div>
+    </div>
+</div>
+
+<!-- Loader -->
+<div id="loader" class="loader-overlay hidden">
+    <div class="loader"></div>
+    <p>Processing...</p>
+</div>
+
+<script type="module" src="dashboard.js"></script>
+</body>
+</html>
