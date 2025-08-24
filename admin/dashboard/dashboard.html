@@ -5,7 +5,218 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OpScheduler - Hospital Management</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        /* Basic Reset & Fonts */
+        :root {
+            --primary-color: #4f46e5;
+            --primary-hover: #4338ca;
+            --secondary-color: #e5e7eb;
+            --secondary-hover: #d1d5db;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --bg-light: #f9fafb;
+            --white: #ffffff;
+            --border-color: #e5e7eb;
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-size: 1rem;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Main Layout */
+        #app-container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 260px;
+            background-color: var(--white);
+            padding: 1.5rem 1rem;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            transition: width 0.3s ease, transform 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .sidebar.collapsed {
+            width: 80px;
+        }
+
+        .sidebar header {
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sidebar h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 0;
+            white-space: nowrap;
+        }
+
+        .sidebar.collapsed h1,
+        .sidebar.collapsed .sidebar-nav-link span {
+            display: none;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            color: var(--text-light);
+            font-weight: 500;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .sidebar-nav-link:hover {
+            background-color: var(--bg-light);
+            color: var(--primary-color);
+        }
+
+        .sidebar-nav-link.active {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .sidebar-nav-link i {
+            font-size: 1.25rem;
+            margin-right: 1rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        .sidebar.collapsed .sidebar-nav-link i {
+            margin-right: 0;
+        }
+
+        .main-content-wrapper {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            overflow: hidden;
+        }
+
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--white);
+            flex-shrink: 0;
+        }
+
+        .main-header h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        /* Components */
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: background-color 0.2s;
+        }
+        .btn-primary { background-color: var(--primary-color); color: var(--white); }
+        .btn-primary:hover { background-color: var(--primary-hover); }
+        .btn-secondary { background-color: var(--secondary-color); color: var(--text-dark); }
+        .btn-secondary:hover { background-color: var(--secondary-hover); }
+
+        .table-container {
+            background-color: var(--white);
+            border-radius: 8px;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            overflow-x: auto;
+        }
+
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--border-color); white-space: nowrap; }
+        th { font-weight: 600; background-color: var(--bg-light); }
+
+        .form-container {
+            background-color: var(--white);
+            padding: 2rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+        .form-container h3 { margin-top: 0; }
+        .form-container input, .form-container select, .form-container textarea, .form-container label {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+        }
+        .form-container label {
+            border: none;
+            padding: 0;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        .form-buttons { display: flex; gap: 1rem; margin-top: 1rem; }
+
+        .hidden { display: none; }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: absolute;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                transform: translateX(-100%);
+                z-index: 1000;
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            .main-header {
+                padding: 1rem;
+            }
+            .main-header h2 {
+                font-size: 1.5rem;
+            }
+            .main-content {
+                padding: 1rem;
+            }
+            .dashboard-grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
+    </style>
 </head>
 <body>
 <div id="app-container">
@@ -18,10 +229,11 @@
             <li><a href="#" class="sidebar-nav-link" data-section="schedule"><i class="bi bi-calendar2-week-fill"></i><span>Schedule</span></a></li>
             <li><a href="#" class="sidebar-nav-link" data-section="doctors"><i class="bi bi-heart-pulse-fill"></i><span>Doctors</span></a></li>
             <li><a href="#" class="sidebar-nav-link" data-section="patients"><i class="bi bi-person-fill"></i><span>Patients</span></a></li>
+            <li><a href="#" class="sidebar-nav-link" data-section="reports"><i class="bi bi-file-earmark-bar-graph-fill"></i><span>Reports</span></a></li>
         </ul>
     </nav>
 
-    <div style="display: flex; flex-direction: column; flex-grow: 1;">
+    <div class="main-content-wrapper">
         <header class="main-header">
             <div style="display: flex; align-items: center; gap: 1rem;">
                 <button id="menu-toggle" class="btn"><i class="bi bi-list"></i></button>
@@ -57,13 +269,17 @@
                     <h3 id="scheduleFormTitle">Schedule New Operation</h3>
                     <form id="scheduleFormElement">
                         <input type="hidden" id="scheduleId">
+                        <label for="patientSelect">Patient</label>
                         <select id="patientSelect" required></select>
+                        <label for="doctorSelect">Doctor</label>
                         <select id="doctorSelect" required></select>
-                        <input type="text" id="operationType" placeholder="Type of Operation" required>
-                        <label id="operation date">Date of Operation</label>
+                        <label for="operationType">Type of Operation</label>
+                        <input type="text" id="operationType" placeholder="e.g., Appendectomy" required>
+                        <label for="operationDate">Date of Operation</label>
                         <input type="date" id="operationDate" required>
-                        <label id="operation time">Time of Operation</label>
+                        <label for="operationTime">Time of Operation</label>
                         <input type="time" id="operationTime" required>
+                        <label for="operationNotes">Notes</label>
                         <textarea id="operationNotes" placeholder="Notes (optional)"></textarea>
                         <div class="form-buttons">
                             <button type="submit" class="btn btn-primary">Save Schedule</button>
@@ -98,9 +314,13 @@
                     <h3 id="doctorFormTitle">Add New Doctor</h3>
                     <form id="doctorFormElement">
                         <input type="hidden" id="doctorId">
+                        <label for="doctorName">Full Name</label>
                         <input type="text" id="doctorName" placeholder="Full Name" required>
+                        <label for="doctorEmail">Email</label>
                         <input type="email" id="doctorEmail" placeholder="Email" required>
+                        <label for="doctorPhone">Phone Number</label>
                         <input type="tel" id="doctorPhone" placeholder="Phone Number" required>
+                        <label for="doctorSpecialty">Specialty</label>
                         <input type="text" id="doctorSpecialty" placeholder="Specialty" required>
                         <div class="form-buttons">
                             <button type="submit" class="btn btn-primary">Save Doctor</button>
@@ -133,11 +353,15 @@
                     <h3 id="patientFormTitle">Add New Patient</h3>
                     <form id="patientFormElement">
                         <input type="hidden" id="patientId">
+                        <label for="patientName">Full Name</label>
                         <input type="text" id="patientName" placeholder="Full Name" required>
+                        <label for="patientEmail">Email</label>
                         <input type="email" id="patientEmail" placeholder="Email" required>
+                        <label for="patientPhone">Phone Number</label>
                         <input type="tel" id="patientPhone" placeholder="Phone Number" required>
-                        <label id="Date of Birth">Date of Birth</label>
+                        <label for="patientDob">Date of Birth</label>
                         <input type="date" id="patientDob" placeholder="Date of Birth" required>
+                        <label for="patientAddress">Address</label>
                         <input type="text" id="patientAddress" placeholder="Address" required>
                         <div class="form-buttons">
                             <button type="submit" class="btn btn-primary">Save Patient</button>
@@ -162,24 +386,29 @@
                 </div>
             </section>
 
+            <!-- Reports Section -->
+            <section id="reports" class="content-section hidden">
+                <!-- Reports content will go here -->
+            </section>
+
         </main>
     </div>
 </div>
 
-<!-- Modals -->
-<div id="detailsModal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn">&times;</span>
-        <div id="detailsModalContent"></div>
-    </div>
-</div>
-
-<!-- Loader -->
-<div id="loader" class="loader-overlay hidden">
-    <div class="loader"></div>
-    <p>Processing...</p>
-</div>
-
+<script type="module">
+    // Simple script to toggle sidebar on mobile
+    const menuToggle = document.getElementById('menu-toggle');
+    const sidebar = document.getElementById('sidebar');
+    menuToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+    });
+    // Add logic to close sidebar when clicking outside of it
+    document.addEventListener('click', (e) => {
+        if (!sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+            sidebar.classList.remove('active');
+        }
+    });
+</script>
 <script type="module" src="dashboard.js"></script>
 </body>
 </html>

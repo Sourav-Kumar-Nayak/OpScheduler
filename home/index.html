@@ -57,6 +57,12 @@
             text-decoration: none;
         }
 
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
         .nav-links {
             list-style: none;
             display: flex;
@@ -76,8 +82,13 @@
             color: var(--primary-color);
         }
 
-        .nav-actions .btn {
-            margin-left: 1rem;
+        .menu-toggle {
+            display: none; /* Hidden on desktop */
+            font-size: 2rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-dark);
         }
 
         /* Buttons */
@@ -172,6 +183,63 @@
             padding: 3rem 0;
             text-align: center;
         }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-menu {
+                display: none; /* Hide menu by default */
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: var(--white);
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                flex-direction: column;
+                padding: 1rem 0;
+                gap: 0;
+            }
+
+            .nav-menu.active {
+                display: flex; /* Show menu when active */
+            }
+
+            .nav-links {
+                flex-direction: column;
+                width: 100%;
+                text-align: center;
+                gap: 0;
+            }
+
+            .nav-links li {
+                width: 100%;
+            }
+
+            .nav-links a {
+                padding: 1rem 0;
+                display: block;
+                width: 100%;
+            }
+
+            .nav-actions {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -179,14 +247,19 @@
     <div class="container">
         <nav class="main-nav">
             <a href="#" class="logo">OpScheduler</a>
-            <ul class="nav-links">
-                <li><a href="#features">Features</a></li>
-                <li><a href="#about">About</a></li>
-            </ul>
-            <div class="nav-actions">
-                <a href="../user/auth/login/login.html" class="btn btn-primary">Login</a>
-                <a href="../user/auth/register/register.html" class="btn btn-secondary">Register</a>
+            <div class="nav-menu" id="nav-menu">
+                <ul class="nav-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#about">About</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <a href="../user/auth/login/login.html" class="btn btn-primary">Login</a>
+                    <a href="../user/auth/register/register.html" class="btn btn-secondary">Register</a>
+                </div>
             </div>
+            <button class="menu-toggle" id="menu-toggle">
+                <i class="bi bi-list"></i>
+            </button>
         </nav>
     </div>
 </header>
@@ -238,5 +311,14 @@
         <p>&copy; 2025 OpScheduler. All Rights Reserved.</p>
     </div>
 </footer>
+
+<script>
+    const menuToggle = document.getElementById('menu-toggle');
+    const navMenu = document.getElementById('nav-menu');
+
+    menuToggle.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+    });
+</script>
 </body>
 </html>

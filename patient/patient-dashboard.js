@@ -23,7 +23,7 @@ checkUserLoggedIn()
     })
     .catch(error => {
         console.error("Authentication check failed:", error);
-        window.location.href = 'login.html';
+        window.location.href = '../user/auth/login/login.html';
     });
 
 // ====== Event Listeners ======
