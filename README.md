@@ -77,6 +77,13 @@ To get a local copy up and running, follow these simple steps.
 7.  **Create Indexes:** The application requires two composite indexes for querying schedules. Run the application, and when you see a "The query requires an index" error in the console, click the provided link to automatically create the necessary indexes in Firestore.
 
 ### Installation
+    **** 
+Run in “Live Server” in vs code 
+ 		    OR
+install node module http-server: - 
+1.npm install -g http-server
+2.http-server
+****
 1.  Clone the repository:
     ```sh
     git clone [https://github.com/your-username/opscheduler.git](https://github.com/your-username/opscheduler.git)
