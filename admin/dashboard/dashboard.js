@@ -59,11 +59,7 @@ function handleNavigation(e) {
     showSection(section);
 }
 
-/**
- * Displays the specified content section and hides all others.
- * It then dynamically imports and initializes the JavaScript module for that section.
- * @param {string} sectionName - The name of the section to show (e.g., 'dashboard', 'doctors').
- */
+
 function showSection(sectionName) {
     // Hide all content sections
     contentSections.forEach(section => section.classList.add('hidden'));
