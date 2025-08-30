@@ -43,11 +43,11 @@ export function logoutHandler() {
                 if (dashboard) {
                     dashboard.style.animation = 'slideOut 0.5s ease-in forwards';
                     setTimeout(() => {
-                        window.location.href = '../../home/index.html';
+                        window.location.href = '../../index.html';
                     }, 500);
                 } else {
                     // fallback if dashboard element is missing
-                    window.location.href = '../../home/index.html';
+                    window.location.href = '../../index.html';
                 }
             } catch (error) {
                 console.error("Sign out error:", error);
